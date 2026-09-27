@@ -36,6 +36,14 @@ This writes `output/kpop_hitster_cards.pdf`. A different CSV and output path can
 python generate_cards.py path/to/songs.csv --output path/to/cards.pdf
 ```
 
+To run both generators in sequence using `songs.csv` by default, run:
+
+```powershell
+.venv\Scripts\python.exe generate_all.py
+```
+
+The CSV includes `id`, `Artist`, `Title`, `Year`, `VideoId`, `Start`, and `End` columns. Both generators use it: `generate_songs.py` writes `songs.json`, then `generate_cards.py` writes the PDF. Keep IDs unique and unchanged. To use another source CSV, pass its path as the first argument; use `--cards-csv` to select a different card CSV.
+
 The PDF uses US Letter pages, with each batch of up to twelve cards arranged as a front page followed by its matching answer-back page. QR codes encode the full `https://dankim0911.github.io/k-hitser/?card=<ID>` URL and include a print-sized quiet zone.
 
 ## Print and Cut
@@ -48,7 +56,7 @@ Cards are 2.5 × 2.625 inches, with square corners and no gaps between adjacent 
 
 The web app is a static GitHub Pages site. To preview it locally, run `python -m http.server 8000` from the project directory and open `http://localhost:8000/?card=1`.
 
-The website uses `songs.json` for video IDs and clip timestamps. Regenerate that file separately after editing `songs.csv`:
+The website uses `songs.json` for video IDs and clip timestamps. To update it independently, run:
 
 ```text
 python generate_songs.py

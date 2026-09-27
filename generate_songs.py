@@ -29,6 +29,7 @@ def extract_video_id(value):
 
 def load_songs(csv_path):
     songs = []
+    seen_ids = set()
 
     with csv_path.open("r", encoding="utf-8-sig", newline="") as csv_file:
         reader = csv.DictReader(csv_file)
@@ -36,9 +37,11 @@ def load_songs(csv_path):
         missing = REQUIRED_COLUMNS - columns
         if missing:
             raise ValueError(f"CSV is missing required columns: {', '.join(sorted(missing))}")
+        has_explicit_ids = "id" in columns
 
         for row_number, row in enumerate(reader, start=2):
             try:
+                card_id = int(row["id"]) if has_explicit_ids else len(songs) + 1
                 artist = row["Artist"].strip()
                 title = row["Title"].strip()
                 video_id = extract_video_id(row["VideoId"])
@@ -50,11 +53,16 @@ def load_songs(csv_path):
                     raise ValueError("Artist, Title, and VideoId must not be empty")
                 if start < 0 or end <= start:
                     raise ValueError("End must be greater than Start, and Start cannot be negative")
+                if card_id < 1:
+                    raise ValueError("ID must be a positive integer")
+                if card_id in seen_ids:
+                    raise ValueError(f"duplicate ID {card_id}")
             except (AttributeError, TypeError, ValueError) as error:
                 raise ValueError(f"Invalid data on CSV row {row_number}: {error}") from error
 
+            seen_ids.add(card_id)
             songs.append({
-                "id": len(songs) + 1,
+                "id": card_id,
                 "title": title,
                 "artist": artist,
                 "year": year,

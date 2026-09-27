@@ -6,7 +6,7 @@
     "year": 2000,
     "videoId": "I3FHA_qASro",
     "start": 38,
-    "end": 68
+    "end": 58
   },
   {
     "id": 2,
@@ -15,7 +15,7 @@
     "year": 2017,
     "videoId": "d9IxdwEFk1c",
     "start": 50,
-    "end": 80
+    "end": 70
   },
   {
     "id": 3,
@@ -24,6 +24,87 @@
     "year": 2009,
     "videoId": "3rYL8AHJaTc",
     "start": 77,
-    "end": 107
+    "end": 97
+  },
+  {
+    "id": 4,
+    "title": "MAKE UP",
+    "artist": "Sam Kim (feat. Crush)",
+    "year": 2018,
+    "videoId": "mTtLMQFPH3M",
+    "start": 27,
+    "end": 47
+  },
+  {
+    "id": 5,
+    "title": "No. 1",
+    "artist": "BoA",
+    "year": 2002,
+    "videoId": "ceZc-5p3g1w",
+    "start": 4,
+    "end": 24
+  },
+  {
+    "id": 6,
+    "title": "Monster",
+    "artist": "EXO",
+    "year": 2016,
+    "videoId": "KSH-FVVtTf0",
+    "start": 2,
+    "end": 22
+  },
+  {
+    "id": 7,
+    "title": "Hate You",
+    "artist": "2ne1",
+    "year": 2012,
+    "videoId": "NB5jyYD2WEw",
+    "start": 100,
+    "end": 120
+  },
+  {
+    "id": 8,
+    "title": "Again & Again",
+    "artist": "2PM",
+    "year": 2009,
+    "videoId": "cUgReo37ECw",
+    "start": 126,
+    "end": 146
+  },
+  {
+    "id": 9,
+    "title": "Yanghwa BRDG(양화대교)",
+    "artist": "Zion.T",
+    "year": 2014,
+    "videoId": "uLUvHUzd4UA",
+    "start": 120,
+    "end": 140
+  },
+  {
+    "id": 10,
+    "title": "Genie",
+    "artist": "Girl's Generation",
+    "year": 2009,
+    "videoId": "6SwiSpudKWI",
+    "start": 30,
+    "end": 50
+  },
+  {
+    "id": 11,
+    "title": "FICTION",
+    "artist": "BEAST",
+    "year": 2011,
+    "videoId": "ZAzWT8mRoR0",
+    "start": 52,
+    "end": 72
+  },
+  {
+    "id": 12,
+    "title": "Décalcomanie",
+    "artist": "MAMAMOO",
+    "year": 2016,
+    "videoId": "LjUXm0Zy_dk",
+    "start": 48,
+    "end": 68
   }
 ]

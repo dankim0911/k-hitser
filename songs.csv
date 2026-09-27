@@ -1,4 +1,13 @@
-id,title,artist,year
-1,Lies (거짓말),g.o.d,2000
-2,Palette,"IU (feat. G-DRAGON)",2017
-3,"Can't Breakup Girl, Can't Breakaway Boy","Leessang (feat. Jung In)",2009
+id,Artist,Title,Year,VideoId,Start,End
+1,g.o.d,Lies (거짓말),2000,https://www.youtube.com/watch?v=I3FHA_qASro,38,58
+2,IU (feat. G-DRAGON),Palette,2017,https://www.youtube.com/watch?v=d9IxdwEFk1c,50,70
+3,Leessang (feat. Jung In),"Can't Breakup Girl, Can't Breakaway Boy",2009,https://www.youtube.com/watch?v=3rYL8AHJaTc,77,97
+4,Sam Kim (feat. Crush),MAKE UP,2018,https://www.youtube.com/watch?v=mTtLMQFPH3M,27,47
+5,BoA,No. 1,2002,https://www.youtube.com/watch?v=ceZc-5p3g1w,4,24
+6,EXO,Monster,2016,https://www.youtube.com/watch?v=KSH-FVVtTf0,2,22
+7,2ne1,Hate You,2012,https://www.youtube.com/watch?v=NB5jyYD2WEw,100,120
+8,2PM,Again & Again,2009,https://www.youtube.com/watch?v=cUgReo37ECw,126,146
+9,Zion.T,Yanghwa BRDG(양화대교),2014,https://www.youtube.com/watch?v=uLUvHUzd4UA,120,140
+10,Girl's Generation,Genie,2009,https://www.youtube.com/watch?v=6SwiSpudKWI,30,50
+11,BEAST,FICTION,2011,https://www.youtube.com/watch?v=ZAzWT8mRoR0,52,72
+12,MAMAMOO ,Décalcomanie ,2016,https://www.youtube.com/watch?v=LjUXm0Zy_dk,48,68
