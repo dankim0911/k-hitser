@@ -69,8 +69,8 @@ def load_songs(csv_path):
 def main():
     parser = argparse.ArgumentParser(description="Generate songs.json from the song CSV.")
     parser.add_argument(
-        "csv_file", nargs="?", type=Path, default=BASE_DIR / "khitser-songs.csv",
-        help="source CSV (default: khitser-songs.csv beside this script)",
+        "csv_file", nargs="?", type=Path, default=BASE_DIR / "songs.csv",
+        help="source CSV (default: songs.csv beside this script)",
     )
     parser.add_argument(
         "json_file", nargs="?", type=Path, default=BASE_DIR / "songs.json",

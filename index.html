@@ -48,6 +48,16 @@
             color: #aaa;
         }
 
+        #status button {
+            padding: 10px 18px;
+            border: 0;
+            border-radius: 4px;
+            background: #fff;
+            color: #111;
+            font: inherit;
+            cursor: pointer;
+        }
+
         .error {
             color: #ff6b6b;
         }
@@ -154,6 +164,7 @@
             events: {
                 onReady: onPlayerReady,
                 onStateChange: onPlayerStateChange,
+                onAutoplayBlocked: showPlayButton,
                 onError: onPlayerError
             }
         });
@@ -168,16 +179,31 @@
 
         event.target.seekTo(currentSong.start, true);
         event.target.playVideo();
+    }
 
-        scheduleStop();
+
+    function showPlayButton() {
+
+        const status = document.getElementById("status");
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.textContent = "Play song";
+        button.addEventListener("click", () => {
+            status.textContent = `Card ${currentSong.id}`;
+            player.seekTo(currentSong.start, true);
+            player.playVideo();
+        });
+
+        status.replaceChildren(button);
     }
 
 
     // -----------------------------------------
-    // Stop the song at our chosen timestamp
+    // Loop the clip at our chosen timestamp
     // -----------------------------------------
 
-    function scheduleStop() {
+    function scheduleLoop() {
 
         clearTimeout(stopTimer);
 
@@ -186,12 +212,11 @@
 
         stopTimer = setTimeout(() => {
 
-            if (player) {
-                player.pauseVideo();
+            if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                player.seekTo(currentSong.start, true);
+                player.playVideo();
+                scheduleLoop();
             }
-
-            document.getElementById("status").textContent =
-                "Clip finished.";
 
         }, duration);
     }
@@ -207,11 +232,11 @@
 
             const currentTime = player.getCurrentTime();
 
-            if (currentTime < currentSong.start) {
+            if (currentTime < currentSong.start || currentTime >= currentSong.end) {
                 player.seekTo(currentSong.start, true);
             }
 
-            scheduleStop();
+            scheduleLoop();
         }
     }
 

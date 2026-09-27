@@ -1,1 +1,2 @@
-# No third-party Python packages are currently required.
+qrcode[pil]>=7.4,<9
+reportlab>=4.0,<5
