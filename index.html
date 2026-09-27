@@ -14,9 +14,6 @@
         body {
             margin: 0;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background: #111;
             color: white;
             font-family: Arial, sans-serif;
@@ -24,18 +21,44 @@
 
         .container {
             width: min(900px, 95vw);
+            margin: 0 auto;
+            padding: 32px 0 48px;
             text-align: center;
         }
 
         h1 {
-            margin-bottom: 30px;
+            margin: 0 0 24px;
+        }
+
+        #play-song {
+            min-width: 220px;
+            min-height: 60px;
+            padding: 14px 24px;
+            border: 0;
+            border-radius: 4px;
+            background: #fff;
+            color: #111;
+            font: 700 20px Arial, sans-serif;
+            cursor: pointer;
+        }
+
+        #play-song:disabled {
+            cursor: wait;
+            opacity: 0.65;
+        }
+
+        #play-song:focus-visible {
+            outline: 3px solid #ff6b6b;
+            outline-offset: 3px;
         }
 
         #player-container {
             position: relative;
             width: 100%;
+            margin-top: 100vh;
             aspect-ratio: 16 / 9;
             background: black;
+            scroll-margin-block: 16px;
         }
 
         #player {
@@ -45,17 +68,8 @@
 
         #status {
             margin-top: 20px;
+            min-height: 1.5em;
             color: #aaa;
-        }
-
-        #status button {
-            padding: 10px 18px;
-            border: 0;
-            border-radius: 4px;
-            background: #fff;
-            color: #111;
-            font: inherit;
-            cursor: pointer;
         }
 
         .error {
@@ -69,12 +83,13 @@
 <div class="container">
     <h1>K-Pop Hitster</h1>
 
-    <div id="player-container">
-        <div id="player"></div>
+    <button id="play-song" type="button" disabled>Loading song...</button>
+    <div id="status" role="status" aria-live="polite">
+        Loading...
     </div>
 
-    <div id="status">
-        Loading...
+    <div id="player-container">
+        <div id="player"></div>
     </div>
 </div>
 
@@ -85,6 +100,15 @@
     let currentSong = null;
     let player = null;
     let stopTimer = null;
+    let playerReady = false;
+    let playRequestPending = false;
+    let playbackRequested = false;
+
+    const playButton = document.getElementById("play-song");
+    const playerContainer = document.getElementById("player-container");
+    const status = document.getElementById("status");
+
+    playButton.addEventListener("click", requestPlayback);
 
 
     // -----------------------------------------
@@ -115,12 +139,12 @@
             currentSong = songs.find(song => song.id === cardId);
 
             if (!currentSong) {
+                playButton.textContent = "PLAY SONG";
                 showError("Card not found.");
                 return;
             }
 
-            document.getElementById("status").textContent =
-                `Card ${currentSong.id}`;
+            status.textContent = "Preparing song...";
         })
         .catch(error => {
             console.error(error);
@@ -155,10 +179,11 @@
             videoId: currentSong.videoId,
 
             playerVars: {
-                autoplay: 1,
+                autoplay: 0,
                 controls: 1,
                 rel: 0,
-                modestbranding: 1
+                modestbranding: 1,
+                playsinline: 1
             },
 
             events: {
@@ -176,26 +201,59 @@
     // -----------------------------------------
 
     function onPlayerReady(event) {
-
         event.target.seekTo(currentSong.start, true);
-        event.target.playVideo();
+        playerReady = true;
+        playButton.disabled = false;
+        playButton.textContent = "PLAY SONG";
+        status.textContent = "Ready";
+    }
+
+
+    function requestPlayback() {
+        if (!playerReady || playRequestPending) {
+            return;
+        }
+
+        if (!("IntersectionObserver" in window)) {
+            playerContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+            status.textContent = "Use the YouTube player controls to start playback.";
+            return;
+        }
+
+        playRequestPending = true;
+        playButton.disabled = true;
+        status.textContent = "Opening player...";
+
+        const observer = new IntersectionObserver((entries) => {
+            const playerIsVisible = entries.some(entry =>
+                entry.isIntersecting && entry.intersectionRatio >= 0.5
+            );
+
+            if (!playerIsVisible) {
+                return;
+            }
+
+            observer.disconnect();
+            playRequestPending = false;
+            playButton.disabled = false;
+            playbackRequested = true;
+            status.textContent = "Starting song...";
+            player.seekTo(currentSong.start, true);
+            player.playVideo();
+        }, { threshold: 0.5 });
+
+        observer.observe(playerContainer);
+        playerContainer.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
 
     function showPlayButton() {
+        if (!playbackRequested) {
+            return;
+        }
 
-        const status = document.getElementById("status");
-        const button = document.createElement("button");
-
-        button.type = "button";
-        button.textContent = "Play song";
-        button.addEventListener("click", () => {
-            status.textContent = `Card ${currentSong.id}`;
-            player.seekTo(currentSong.start, true);
-            player.playVideo();
-        });
-
-        status.replaceChildren(button);
+        playbackRequested = false;
+        status.textContent = "Playback was blocked. Use the visible YouTube player controls to play.";
     }
 
 
@@ -229,6 +287,8 @@
     function onPlayerStateChange(event) {
 
         if (event.data === YT.PlayerState.PLAYING) {
+            playbackRequested = false;
+            status.textContent = `Card ${currentSong.id}`;
 
             const currentTime = player.getCurrentTime();
 
@@ -248,6 +308,7 @@
     function onPlayerError(event) {
 
         console.error("YouTube error:", event.data);
+        playButton.disabled = true;
 
         showError(
             "This YouTube video cannot be played."
@@ -256,8 +317,6 @@
 
 
     function showError(message) {
-
-        const status = document.getElementById("status");
 
         status.textContent = message;
         status.classList.add("error");
